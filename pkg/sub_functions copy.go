@@ -1,7 +1,6 @@
 package reload
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -74,13 +73,14 @@ func Convert_To(Data, Bas string) (string, error) {
 	return Data, err
 }
 
-func Capit(word string) (string, error) {
-	if len(word) == 0 || !isAlpha(rune(word[0])) {
-		return "", errors.New("You can't capitalize the word: " + word)
+func Capit(word string) string {
+	cap_word := ""
+	if len(word) == 0 || isAlpha(rune(word[0])) {
+		// return "", errors.New("You can't capitalize the word: " + word)
+		cap_word = strings.ToUpper(string(word[0])) + word[1:]
 	}
 
-	cap_word := strings.ToUpper(string(word[0])) + word[1:]
-	return cap_word, nil
+	return cap_word
 }
 
 func Split_Low_Up_Cap(str string) []string {
@@ -116,7 +116,7 @@ func Low_Up_Cap(Data, Type string) (string, error) {
 			switch Type {
 			case "(up)":
 
-				New_Data_Slices[len(New_Data_Slices)-1] = strings.ToUpper(Data_Slices[i-1])
+				New_Data_Slices[len(New_Data_Slices)-1] = Up(Data_Slices[i-1])
 				if err != nil {
 					fmt.Println(err)
 					return "", err
@@ -126,7 +126,7 @@ func Low_Up_Cap(Data, Type string) (string, error) {
 
 			case "(low)":
 
-				New_Data_Slices[len(New_Data_Slices)-1] = strings.ToLower(Data_Slices[i-1])
+				New_Data_Slices[len(New_Data_Slices)-1] = Low(Data_Slices[i-1])
 				if err != nil {
 					fmt.Println(err)
 					return "", err
@@ -136,7 +136,7 @@ func Low_Up_Cap(Data, Type string) (string, error) {
 
 			case "(cap)":
 
-				New_Data_Slices[len(New_Data_Slices)-1], err = Capit(Data_Slices[i-1])
+				New_Data_Slices[len(New_Data_Slices)-1] = Capit(Data_Slices[i-1])
 				if err != nil {
 					fmt.Println(err)
 					return "", err
@@ -153,6 +153,94 @@ func Low_Up_Cap(Data, Type string) (string, error) {
 	Data = strings.Join(New_Data_Slices, " ")
 	return Data, err
 }
+
+// 6
+func Low_Up_Cap_Specified(Data string) (string, error) {
+	Data_Slices := Split_Low_Up_Cap(Data)
+	New_Data_Slices := []string{}
+	var err error
+	for i, word := range Data_Slices {
+		if i > 0 {
+			_, Type, _ := SplitByPrefixSuffix(word, "(", ")")
+			Type = "(" + Type + ")"
+			switch {
+			case strings.HasPrefix(word, "(low,"):
+
+				ModifyWords(New_Data_Slices, Read_number(word), Low)
+				word = strings.ReplaceAll(word, Type, "")
+				New_Data_Slices = append(New_Data_Slices, word)
+
+			case strings.HasPrefix(word, "(up,"):
+
+				ModifyWords(New_Data_Slices, Read_number(word), Up)
+				word = strings.ReplaceAll(word, Type, "")
+				New_Data_Slices = append(New_Data_Slices, word)
+
+			case strings.HasPrefix(word, "(cap,"):
+
+				ModifyWords(New_Data_Slices, Read_number(word), Capit)
+				word = strings.ReplaceAll(word, Type, "")
+				New_Data_Slices = append(New_Data_Slices, word)
+			default:
+				New_Data_Slices = append(New_Data_Slices, word)
+			}
+		} else {
+			New_Data_Slices = append(New_Data_Slices, word)
+		}
+	}
+
+	Data = strings.Join(New_Data_Slices, " ")
+	return Data, err
+}
+
+func ModifyWords(content []string, number int, transformFunc func(string) string) {
+	for i := len(content) - number; i < len(content); i++ {
+		content[i] = transformFunc(content[i])
+	}
+}
+
+func Low(word string) string {
+	return strings.ToLower(word)
+}
+
+func Up(word string) string {
+	return strings.ToUpper(word)
+}
+
+func Read_number(content string) int {
+	number := 0
+	for _, char := range content {
+		if char >= '0' && char <= '9' {
+			new_number, _ := strconv.Atoi(string(rune(char)))
+			number = number*10 + new_number
+		}
+	}
+	if number == 0 {
+		return 1
+	}
+	return number
+}
+
+func SplitByPrefixSuffix(s, prefix, suffix string) (string, string, string) {
+	startIndex := strings.Index(s, prefix)
+	if startIndex == -1 {
+		return s, "", ""
+	}
+	startIndex += len(prefix)
+
+	endIndex := strings.LastIndex(s, suffix)
+	if endIndex == -1 || endIndex < startIndex {
+		return s, "", ""
+	}
+
+	before := s[:startIndex-len(prefix)]
+	middle := s[startIndex:endIndex]
+	after := s[endIndex+len(suffix):]
+
+	return before, middle, after
+}
+
+// ----
 
 func Clear_Console(system string) {
 	// For Unix/Linux

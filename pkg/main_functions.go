@@ -59,7 +59,8 @@ func Modifications(Data string) (string, error) {
 			Data, err = Low_Up_Cap(Data, "(cap)")
 		case 6:
 			fmt.Println("You selected: Apply (low), (up), (cap) to a specified number of words.")
-			// Call the function to apply transformations to a specified number of words
+			Data, err = Low_Up_Cap_Specified(Data)
+
 		case 7:
 			fmt.Println("You selected: Adjust spaces between punctuation and words.")
 			Data = Punctuations(SplitPunctuations(Data))
