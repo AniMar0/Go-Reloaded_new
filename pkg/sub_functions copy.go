@@ -51,16 +51,20 @@ func Convert_To(Data, Bas string) (string, error) {
 	for i, word := range Data_Slices {
 		if strings.Contains(word, Bas) && i > 0 {
 
-			if word != Bas {
-				err = errors.New("Syntax Error " + word)
-				return "", err
-			}
+			/*
+				if word != Bas {
+					err = errors.New("Syntax Error " + word)
+					return "", err
+				}
+			*/
 
 			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], Bas)
 			if err != nil {
 				fmt.Println(err)
 				return "", err
 			}
+			word = strings.ReplaceAll(word, Bas, "")
+			New_Data_Slices = append(New_Data_Slices, word)
 		} else {
 			New_Data_Slices = append(New_Data_Slices, word)
 		}
@@ -162,4 +166,79 @@ func Clear_Console(system string) {
 		cmd.Stdout = os.Stdout
 		cmd.Run()
 	}
+}
+
+func Punctuations(content []string) string {
+	New_content := ""
+	for i, w := range content {
+		isAllPunc := true // Reset this flag for each word
+		for _, c := range w {
+			if c != '.' && c != ',' && c != '!' && c != '?' && c != ':' && c != ';' {
+				isAllPunc = false
+				break
+			}
+		}
+		if isAllPunc {
+			New_content += w // No space before punctuation marks
+		} else {
+			if i > 0 { // Add a space before non-punctuation words only if it's not the first word
+				New_content += " "
+			}
+			New_content += w // Add non-punctuation words
+		}
+	}
+	return New_content
+}
+
+func SplitPunctuations(s string) []string {
+	var slice []string
+	var torf []bool
+	var result []string
+	wordStart := -1
+	inWord := false
+
+	for i, char := range s {
+		if char == ' ' || char == '\n' || char == '\t' {
+			if inWord {
+				slice = append(slice, s[wordStart:i])
+				inWord = false
+			}
+		} else {
+			if !inWord {
+				wordStart = i
+				inWord = true
+			}
+		}
+	}
+	if inWord {
+		slice = append(slice, s[wordStart:])
+	}
+
+	for _, w := range slice {
+		if len(w) > 0 && strings.ContainsAny(string(w[0]), ".,?!:;") {
+			torf = append(torf, true)
+		} else {
+			torf = append(torf, false)
+		}
+	}
+
+	for i, w := range slice {
+		if !torf[i] {
+			result = append(result, w)
+		} else {
+			j := 0
+			for j < len(w) && strings.ContainsAny(string(w[j]), ".,?!:;") {
+				j++
+			}
+			if j > 0 {
+				firsthalf := w[:j]
+				secondhalf := w[j:]
+				result = append(result, firsthalf)
+				result = append(result, secondhalf)
+			} else {
+				result = append(result, w)
+			}
+		}
+	}
+	return result
 }

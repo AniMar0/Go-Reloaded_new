@@ -62,7 +62,7 @@ func Modifications(Data string) string {
 			// Call the function to apply transformations to a specified number of words
 		case 7:
 			fmt.Println("You selected: Adjust spaces between punctuation and words.")
-			// Call the function to adjust spaces
+			Data = Punctuations(SplitPunctuations(Data))
 		case 8:
 			fmt.Println("You selected: Adjust quotes (' ') around words.")
 			// Call the function to adjust quotes
