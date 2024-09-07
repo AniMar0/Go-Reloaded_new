@@ -74,16 +74,13 @@ func Convert_To(Data, Bas string) (string, error) {
 	return Data, err
 }
 
-func Capit(word string) string {
-	cap_word := ""
-	for i, char := range word {
-		if (char >= 'a' && char <= 'z') && i == 0 {
-			cap_word += string(char - 32)
-		} else {
-			cap_word += string(char)
-		}
+func Capit(word string) (string, error) {
+	if len(word) == 0 || !isAlpha(rune(word[0])) {
+		return "", errors.New("You can't capitalize the word: " + word)
 	}
-	return cap_word
+
+	cap_word := strings.ToUpper(string(word[0])) + word[1:]
+	return cap_word, nil
 }
 
 func Split_Low_Up_Cap(str string) []string {
@@ -109,41 +106,46 @@ func Split_Low_Up_Cap(str string) []string {
 	return slisce
 }
 
-func Low_Up_Cap(Data string) (string, error) {
+func Low_Up_Cap(Data, Type string) (string, error) {
 	Data_Slices := Split_Low_Up_Cap(Data)
 	New_Data_Slices := []string{}
 	var err error
 
 	for i, word := range Data_Slices {
-		switch {
+		if strings.Contains(word, Type) && i > 0 {
+			switch Type {
+			case "(up)":
 
-		case strings.Contains(word, "(hex)") && i > 0:
+				New_Data_Slices[len(New_Data_Slices)-1] = strings.ToUpper(Data_Slices[i-1])
+				if err != nil {
+					fmt.Println(err)
+					return "", err
+				}
+				word = strings.ReplaceAll(word, Type, "")
+				New_Data_Slices = append(New_Data_Slices, word)
 
-			if word != "(hex)" {
-				err = errors.New("Syntax Error " + word)
-				return "", err
+			case "(low)":
+
+				New_Data_Slices[len(New_Data_Slices)-1] = strings.ToLower(Data_Slices[i-1])
+				if err != nil {
+					fmt.Println(err)
+					return "", err
+				}
+				word = strings.ReplaceAll(word, Type, "")
+				New_Data_Slices = append(New_Data_Slices, word)
+
+			case "(cap)":
+
+				New_Data_Slices[len(New_Data_Slices)-1], err = Capit(Data_Slices[i-1])
+				if err != nil {
+					fmt.Println(err)
+					return "", err
+				}
+				word = strings.ReplaceAll(word, Type, "")
+				New_Data_Slices = append(New_Data_Slices, word)
+
 			}
-
-			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], "hex")
-			if err != nil {
-				fmt.Println(err)
-				return "", err
-			}
-
-		case strings.Contains(word, "(bin)") && i > 1:
-
-			if word != "(bin)" {
-				err = errors.New("Syntax Error " + word)
-				return "", err
-			}
-
-			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], "bin")
-			if err != nil {
-				fmt.Println(err)
-				return "", err
-			}
-
-		default:
+		} else {
 			New_Data_Slices = append(New_Data_Slices, word)
 		}
 	}
@@ -241,4 +243,50 @@ func SplitPunctuations(s string) []string {
 		}
 	}
 	return result
+}
+
+func Single_Cote(content string) string {
+	new_content := Split_Colon(content, "'")
+	if len(new_content) == 0 {
+		return content
+	}
+	colon := false
+	str := ""
+	for _, arg := range new_content {
+		if arg == "'" && !colon {
+			colon = true
+			continue
+		} else if arg == "'" && colon {
+			colon = false
+			continue
+		}
+
+		if colon {
+			str += "'" + RemoveSpace(arg) + "'"
+		} else {
+			str += arg
+		}
+	}
+
+	return str
+}
+
+func RemoveSpace(str string) string {
+	return strings.TrimSpace(str)
+}
+
+func Split_Colon(s, sep string) []string {
+	parts := strings.Split(s, sep)
+	result := []string{}
+	for i, part := range parts {
+		result = append(result, part)
+		if i < len(parts)-1 {
+			result = append(result, sep) // Add separator back between parts
+		}
+	}
+	return result
+}
+
+func isAlpha(char rune) bool {
+	return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')
 }

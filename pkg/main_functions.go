@@ -24,7 +24,7 @@ func Read_File() (string, error) {
 	if Start {
 		return string(file), err
 	} else {
-		err = errors.New("you are cansled the prosce")
+		err = errors.New(" Exiting program. ")
 		return "", err
 	}
 }
@@ -50,13 +50,13 @@ func Modifications(Data string) (string, error) {
 			}
 		case 3:
 			fmt.Println("You selected: Convert words to uppercase (up).")
-			// Call the function to convert words to uppercase
+			Data, err = Low_Up_Cap(Data, "(up)")
 		case 4:
 			fmt.Println("You selected: Convert words to lowercase (low).")
-			// Call the function to convert words to lowercase
+			Data, err = Low_Up_Cap(Data, "(low)")
 		case 5:
 			fmt.Println("You selected: Capitalize the first letter of words (cap).")
-			// Call the function to capitalize words
+			Data, err = Low_Up_Cap(Data, "(cap)")
 		case 6:
 			fmt.Println("You selected: Apply (low), (up), (cap) to a specified number of words.")
 			// Call the function to apply transformations to a specified number of words
@@ -65,7 +65,7 @@ func Modifications(Data string) (string, error) {
 			Data = Punctuations(SplitPunctuations(Data))
 		case 8:
 			fmt.Println("You selected: Adjust quotes (' ') around words.")
-			// Call the function to adjust quotes
+			Data = Single_Cote(Data)
 		case 9:
 			fmt.Println("You selected: Replace 'a' with 'an' if the next word starts with a vowel or 'h'.")
 			// Call the function to replace 'a' with 'an'
