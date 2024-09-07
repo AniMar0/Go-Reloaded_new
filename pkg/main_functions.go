@@ -20,7 +20,7 @@ func Modifications(Data string) string {
 
 	Data, err = Convert_To(Data)
 	if err != nil {
-		return "there is error in Convert_To\n"
+		return string(err.Error())
 	}
 
 	return Data
