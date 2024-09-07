@@ -15,13 +15,17 @@ func Read_File() string {
 	return string(file)
 }
 
-func Modifications(Data string) (string, error) {
+func Modifications(Data string) string {
 	var err error
 
 	Data, err = Convert_To(Data)
 	if err != nil {
-		return "there is error in Convert_To\n", err
+		return "there is error in Convert_To\n"
 	}
 
-	return Data, err
+	return Data
+}
+
+func Write_File(Data string) {
+	os.WriteFile(os.Args[2], []byte(Data), 0o644)
 }
