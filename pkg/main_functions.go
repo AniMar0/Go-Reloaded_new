@@ -29,7 +29,7 @@ func Read_File() (string, error) {
 	}
 }
 
-func Modifications(Data string) string {
+func Modifications(Data string) (string, error) {
 	var err error
 
 	for {
@@ -40,13 +40,13 @@ func Modifications(Data string) string {
 			fmt.Println("You selected: Replace hexadecimal numbers (hex) with decimal.")
 			Data, err = Convert_To(Data, "(hex)")
 			if err != nil {
-				return string(err.Error())
+				return "", err
 			}
 		case 2:
 			fmt.Println("You selected: Replace binary numbers (bin) with decimal.")
 			Data, err = Convert_To(Data, "(bin)")
 			if err != nil {
-				return string(err.Error())
+				return "", err
 			}
 		case 3:
 			fmt.Println("You selected: Convert words to uppercase (up).")
@@ -71,7 +71,7 @@ func Modifications(Data string) string {
 			// Call the function to replace 'a' with 'an'
 		case 10:
 			fmt.Println("Exiting program.")
-			return Data
+			return Data, err
 		}
 	}
 }

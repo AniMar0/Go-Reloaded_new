@@ -13,7 +13,11 @@ func main() {
 		return
 	}
 
-	Data = reload.Modifications(Data)
+	Data, err = reload.Modifications(Data)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	reload.Write_File(Data)
 }
