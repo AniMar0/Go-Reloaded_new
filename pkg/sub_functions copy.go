@@ -3,13 +3,15 @@ package reload
 import (
 	"errors"
 	"fmt"
+	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 )
 
 func isvalidExt(file_name string) bool {
 	for i, char := range file_name {
-		if char == '.' {
+		if char == '.' && i != 0 {
 			if file_name[i:] == ".txt" {
 				return true
 			}
@@ -31,7 +33,7 @@ func isValidArg(args []string) bool {
 
 func Convert_By_Bas(Number, Bas string) (string, error) {
 	var base int
-	if Bas == "hex" {
+	if Bas == "(hex)" {
 		base = 16
 	} else {
 		base = 2
@@ -41,41 +43,25 @@ func Convert_By_Bas(Number, Bas string) (string, error) {
 	return strconv.Itoa(int(conver)), err
 }
 
-func Convert_To(Data string) (string, error) {
+func Convert_To(Data, Bas string) (string, error) {
 	Data_Slices := strings.Split(Data, " ")
 	New_Data_Slices := []string{}
 	var err error
 
 	for i, word := range Data_Slices {
-		switch {
+		if strings.Contains(word, Bas) && i > 0 {
 
-		case strings.Contains(word, "(hex)") && i > 0:
-
-			if word != "(hex)" {
+			if word != Bas {
 				err = errors.New("Syntax Error " + word)
 				return "", err
 			}
 
-			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], "hex")
+			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], Bas)
 			if err != nil {
 				fmt.Println(err)
 				return "", err
 			}
-
-		case strings.Contains(word, "(bin)") && i > 1:
-
-			if word != "(bin)" {
-				err = errors.New("Syntax Error " + word)
-				return "", err
-			}
-
-			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], "bin")
-			if err != nil {
-				fmt.Println(err)
-				return "", err
-			}
-
-		default:
+		} else {
 			New_Data_Slices = append(New_Data_Slices, word)
 		}
 	}
@@ -160,4 +146,20 @@ func Low_Up_Cap(Data string) (string, error) {
 
 	Data = strings.Join(New_Data_Slices, " ")
 	return Data, err
+}
+
+func Clear_Console(system string) {
+	// For Unix/Linux
+	if system == "linux" {
+		cmd := exec.Command("clear")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
+
+	// For Windows
+	if system == "windows" {
+		cmd := exec.Command("cmd", "/c", "cls")
+		cmd.Stdout = os.Stdout
+		cmd.Run()
+	}
 }
