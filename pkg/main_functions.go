@@ -1,42 +1,55 @@
 package reload
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func Read_File() (string, error) {
-	var err error
 	Args := os.Args
 	if !isValidArg(Args) {
-		err = errors.New("invalid Args ")
-		return "", err
+		return "", errors.New("invalid Args")
 	}
-	file, err := os.ReadFile(Args[1])
+
+	file, err := os.Open(Args[1])
 	if err != nil {
-		err = errors.New("File not Found " + Args[1])
-		return "", err
+		return "", errors.New("File not Found: " + Args[1])
 	}
+	defer file.Close()
 
+	// Start the process based on Start_Menu's result
 	Start := Start_Menu(Args)
+	if !Start {
+		return "", errors.New("Exiting program.")
+	}
 
-	if Start {
-		return string(file), err
-	} else {
-		err = errors.New(" Exiting program. ")
+	// Using bufio.Scanner to read file line by line
+	var fileContent string
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		fileContent += line + "\n"
+	}
+	fileContent = fileContent[:len(fileContent)-1]
+	// Checking for scanning errors
+	if err := scanner.Err(); err != nil {
 		return "", err
 	}
+
+	return fileContent, nil
 }
 
-func Modifications(Data string) (string, error) {
+func Modifications(Data string, Line, total int) (string, error) {
 	var err error
 	all := 0
 	for {
 		var choice int
 
 		if all == 0 {
-			choice = Modifications_Menu()
+			choice = Modifications_Menu(Line, total)
 			if choice == 0 {
 				all++
 			}
@@ -110,6 +123,24 @@ func Modifications(Data string) (string, error) {
 	}
 }
 
-func Write_File(Data string) {
-	os.WriteFile(os.Args[2], []byte(Data), 0o644)
+func Write_File(Data string) error {
+	file, err := os.OpenFile(os.Args[2], os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := bufio.NewWriter(file)
+
+	// Split the Data into lines and write them one by one
+	lines := strings.Split(Data, "\n") // Assume this splits the content by lines (or use strings.Split if needed)
+	for _, line := range lines {
+		_, err = writer.WriteString(line + "\n")
+		if err != nil {
+			return err
+		}
+	}
+
+	// Flush any remaining buffered data to the file
+	return writer.Flush()
 }

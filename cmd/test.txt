@@ -1,1 +1,6 @@
-harold wilson (cap, 2) : ' I am a optimist ,but 1a (hex) optimist ...who carries a raincoat . ' 1010 (bin)
+harold wilson (cap, 2) : ' I am a optimist ,but 1a (hex) optimist ...who carries a raincoat . '1 1010 (bin)
+harold wilson (cap, 2) : ' I am a optimist ,but 1a (hex) optimist ...who carries a raincoat . '2 1010 (bin)
+harold wilson (cap, 2) : ' I am a optimist ,but 1a (hex) optimist ...who carries a raincoat . '3 1010 (bin)
+harold wilson (cap, 2) : ' I am a optimist ,but 1a (hex) optimist ...who carries a raincoat . '4 1010 (bin)
+harold wilson (cap, 2) : ' I am a optimist ,but 1a (hex) optimist ...who carries a raincoat . '5 1010 (bin)
+harold wilson (cap, 2) : ' I am a optimist ,but 1a (hex) optimist ...who carries a raincoat . '6 1010 (bin)

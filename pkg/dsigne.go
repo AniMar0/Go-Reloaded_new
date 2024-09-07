@@ -31,7 +31,7 @@ func Start_Menu(Args []string) bool {
 	}
 }
 
-func Modifications_Menu() int {
+func Modifications_Menu(Line, total int) int {
 	var choice int
 	system := "windows" // or can be "linux" based on the system
 	Clear_Console(system)
@@ -39,6 +39,7 @@ func Modifications_Menu() int {
 	fmt.Println("****************************************")
 	fmt.Println("*             Text Modifier            *")
 	fmt.Println("****************************************")
+	fmt.Printf("Line [%v/%v]\n", Line, total)
 	fmt.Println(" [0] Apply all modifications")
 	fmt.Println(" [1] Replace hexadecimal numbers (hex) with decimal")
 	fmt.Println(" [2] Replace binary numbers (bin) with decimal")
