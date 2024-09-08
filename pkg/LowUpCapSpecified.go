@@ -1,6 +1,7 @@
 package reload
 
 import (
+	"errors"
 	"strconv"
 	"strings"
 )
@@ -15,19 +16,25 @@ func Low_Up_Cap_Specified(Data string) (string, error) {
 			Type = "(" + Type + ")"
 			switch {
 			case strings.HasPrefix(word, "(low,"):
-
+				if word != Type {
+					return "", errors.New("Santax Error " + word)
+				}
 				ModifyWords(New_Data_Slices, Read_number(word), Low)
 				word = strings.ReplaceAll(word, Type, "")
 				New_Data_Slices = append(New_Data_Slices, word)
 
 			case strings.HasPrefix(word, "(up,"):
-
+				if word != Type {
+					return "", errors.New("Santax Error " + word)
+				}
 				ModifyWords(New_Data_Slices, Read_number(word), Up)
 				word = strings.ReplaceAll(word, Type, "")
 				New_Data_Slices = append(New_Data_Slices, word)
 
 			case strings.HasPrefix(word, "(cap,"):
-
+				if word != Type {
+					return "", errors.New("Santax Error " + word)
+				}
 				ModifyWords(New_Data_Slices, Read_number(word), Capit)
 				word = strings.ReplaceAll(word, Type, "")
 				New_Data_Slices = append(New_Data_Slices, word)

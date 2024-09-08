@@ -1,6 +1,7 @@
 package reload
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -26,12 +27,10 @@ func Convert_To(Data, Bas string) (string, error) {
 	for i, word := range Data_Slices {
 		if strings.Contains(word, Bas) && i > 0 {
 
-			/*
-				if word != Bas {
-					err = errors.New("Syntax Error " + word)
-					return "", err
-				}
-			*/
+			if word != Bas {
+				err = errors.New("Syntax Error " + word)
+				return "", err
+			}
 
 			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], Bas)
 			if err != nil {
