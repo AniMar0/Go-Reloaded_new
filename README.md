@@ -88,6 +88,6 @@ $ go test
 ## 👨‍💻 About Me
 <p align="left"> I'm a passionate developer who enjoys building text processing tools and solving complex problems through code. Currently, I'm honing my Go skills and working on various backend projects. I also love collaborating on open-source projects. </p> <p align="left"> 💌 Feel free to reach out: ⤵️ </p> 
 <p align="left"> 
-  <a href="#" title="Gmail"> <img src="https://img.shields.io/badge/-Gmail-FF0000?style=flat-square&labelColor=FF0000&logo=gmail&logoColor=white&link=YOUR-GMAIL-LINK" alt="Gmail"/></a> 
-  <a href="#" title="LinkedIn"> <img src="https://img.shields.io/badge/-Linkedin-0e76a8?style=flat-square&logo=Linkedin&logoColor=white&link=YOUR-LINKEDIN-LINK" alt="LinkedIn"/></a></a> 
-  <a href="#" title="Instagram"> <img src="https://img.shields.io/badge/-Instagram-DF0174?style=flat-square&labelColor=DF0174&logo=instagram&logoColor=white&link=YOUR-INSTAGRAM-LINK" alt="Instagram"/></a> </p>
+  <a href="#" title="Gmail"> <img src="https://img.shields.io/badge/-Gmail-FF0000?style=flat-square&labelColor=FF0000&logo=gmail&logoColor=white&link=mr.zakariakahlaoui@gmail.com" alt="Gmail"/></a> 
+  <a href="#" title="LinkedIn"> <img src="https://img.shields.io/badge/-Linkedin-0e76a8?style=flat-square&logo=Linkedin&logoColor=white&link=www.linkedin.com/in/zakaria-kahlaoui" alt="LinkedIn"/></a></a> 
+  <a href="#" title="Instagram"> <img src="https://img.shields.io/badge/-Instagram-DF0174?style=flat-square&labelColor=DF0174&logo=instagram&logoColor=white&link=https://www.instagram.com/zakariia__48/" alt="Instagram"/></a> </p>
