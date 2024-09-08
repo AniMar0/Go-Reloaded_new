@@ -8,9 +8,6 @@
 This project aims to create a **powerful tool** for text completion, editing, and auto-correction.
 The tool will help users automate tedious text modifications.
 
-> 💡 **Tip**: Writing your own tests will not only help you audit others but also ensure your project is solid and error-free!
-
-
  ## 🔥 Features
 
 <img src="https://raw.githubusercontent.com/MicaelliMedeiros/micaellimedeiros/master/image/computer-illustration.png" alt="Computer Illustration" min-width="400px" max-width="400px" width="400px" align="right">
