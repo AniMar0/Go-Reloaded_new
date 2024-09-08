@@ -73,8 +73,7 @@ func Modifications(Data string, Line, total int) (string, error) {
 			}
 		case choice == 9 || all == 9:
 			//("You selected: Replace 'a' with 'an' if the next word starts with a vowel or 'h'.")
-			// Call the function to replace 'a' with 'an'
-
+			Data = AtoAn(Data)
 			if all != 0 {
 				all++
 			}
