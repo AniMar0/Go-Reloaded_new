@@ -37,7 +37,6 @@ func Convert_To(Data, Bas string) (string, error) {
 		}
 		word = strings.ReplaceAll(word, Bas, "")
 		New_Data_Slices = append(New_Data_Slices, word)
-
 	}
 
 	Data = strings.Join(New_Data_Slices, " ")
