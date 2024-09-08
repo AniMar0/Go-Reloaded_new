@@ -7,19 +7,25 @@ func Single_Cote(content string) string {
 	if len(new_content) == 0 {
 		return content
 	}
-	colon := false
+	First_colon := false
+	last_colon := false
 	str := ""
+
 	for _, arg := range new_content {
-		if arg == "'" && !colon {
-			colon = true
+		if arg == "'" && !First_colon {
+			First_colon = true
 			continue
-		} else if arg == "'" && colon {
-			colon = false
+		} else if arg == "'" && First_colon {
+			First_colon = false
+			last_colon = true
 			continue
 		}
 
-		if colon {
+		if last_colon {
 			str += "'" + RemoveSpace(arg) + "'"
+			last_colon = false
+		} else if First_colon {
+			str += "'" + arg
 		} else {
 			str += arg
 		}
