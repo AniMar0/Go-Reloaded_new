@@ -6,7 +6,7 @@ import (
 
 func Modifications_Menu(Line, total int) int {
 	var choice int
-	system := "windows" // or can be "linux" based on the system
+	system := "linux" // or can be "linux" based on the system
 	Clear_Console(system)
 
 	fmt.Println("****************************************")

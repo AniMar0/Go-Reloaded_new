@@ -7,7 +7,7 @@ import (
 func Start_Menu(Args []string) bool {
 	var start string
 
-	system := "windows" // or can be "linux" based on the system
+	system := "linux" // or can be "linux" based on the system
 
 	fmt.Println("***************************************")
 	fmt.Println("*             Go Reloaded             *")
