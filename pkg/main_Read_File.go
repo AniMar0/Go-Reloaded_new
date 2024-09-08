@@ -21,7 +21,7 @@ func Read_File() (string, error) {
 	// Start the process based on Start_Menu's result
 	Start := Start_Menu(Args)
 	if !Start {
-		return "", errors.New("Exiting program.")
+		return "", errors.New(" Exiting program. ")
 	}
 
 	// Using bufio.Scanner to read file line by line

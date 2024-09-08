@@ -1,7 +1,6 @@
 package reload
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -16,30 +15,21 @@ func Low_Up_Cap(Data, Type string) (string, error) {
 			case "(up)":
 
 				New_Data_Slices[len(New_Data_Slices)-1] = Up(Data_Slices[i-1])
-				if err != nil {
-					fmt.Println(err)
-					return "", err
-				}
+
 				word = strings.ReplaceAll(word, Type, "")
 				New_Data_Slices = append(New_Data_Slices, word)
 
 			case "(low)":
 
 				New_Data_Slices[len(New_Data_Slices)-1] = Low(Data_Slices[i-1])
-				if err != nil {
-					fmt.Println(err)
-					return "", err
-				}
+
 				word = strings.ReplaceAll(word, Type, "")
 				New_Data_Slices = append(New_Data_Slices, word)
 
 			case "(cap)":
 
 				New_Data_Slices[len(New_Data_Slices)-1] = Capit(Data_Slices[i-1])
-				if err != nil {
-					fmt.Println(err)
-					return "", err
-				}
+
 				word = strings.ReplaceAll(word, Type, "")
 				New_Data_Slices = append(New_Data_Slices, word)
 
@@ -52,5 +42,3 @@ func Low_Up_Cap(Data, Type string) (string, error) {
 	Data = strings.Join(New_Data_Slices, " ")
 	return Data, err
 }
-
-
