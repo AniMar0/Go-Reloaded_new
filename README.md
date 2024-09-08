@@ -88,6 +88,15 @@ $ go test
 ## 👨‍💻 About Me
 <p align="left"> I'm a passionate developer who enjoys building text processing tools and solving complex problems through code. Currently, I'm honing my Go skills and working on various backend projects. I also love collaborating on open-source projects. </p> <p align="left"> 💌 Feel free to reach out: ⤵️ </p> 
 <p align="left"> 
-  <a href="#" title="Gmail"> <img src="https://img.shields.io/badge/-Gmail-FF0000?style=flat-square&labelColor=FF0000&logo=gmail&logoColor=white&link=mr.zakariakahlaoui@gmail.com" alt="Gmail"/></a> 
-  <a href="#" title="LinkedIn"> <img src="https://img.shields.io/badge/-Linkedin-0e76a8?style=flat-square&logo=Linkedin&logoColor=white&link=www.linkedin.com/in/zakaria-kahlaoui" alt="LinkedIn"/></a></a> 
-  <a href="#" title="Instagram"> <img src="https://img.shields.io/badge/-Instagram-DF0174?style=flat-square&labelColor=DF0174&logo=instagram&logoColor=white&link=https://www.instagram.com/zakariia__48/" alt="Instagram"/></a> </p>
+  <a href="mailto:mr.zakariakahlaoui@gmail.com" title="Gmail"> <img src="https://img.shields.io/badge/-Gmail-FF0000?style=flat-square&labelColor=FF0000&logo=gmail&logoColor=white&link=YOUR-GMAIL-LINK" alt="Gmail"/></a> 
+  <a href="https://www.linkedin.com/in/zakaria-kahlaoui/" title="LinkedIn"> <img src="https://img.shields.io/badge/-Linkedin-0e76a8?style=flat-square&logo=Linkedin&logoColor=white&link=YOUR-LINKEDIN-LINK" alt="LinkedIn"/></a></a> 
+  <a href="https://www.instagram.com/zakariia__48/" title="Instagram"> <img src="https://img.shields.io/badge/-Instagram-DF0174?style=flat-square&labelColor=DF0174&logo=instagram&logoColor=white&link=YOUR-INSTAGRAM-LINK" alt="Instagram"/></a> </p>
+
+## 📜 License
+This project is licensed under the MIT License.
+
+## 🌟 Contributing
+Want to help improve this tool? Contributions are welcome! Feel free to fork the repository and submit a pull request. Ensure your code follows good Go practices and is well-tested.
+
+## 📝 Acknowledgements
+Special thanks to my peers and @kenji20thh for their insights and reviews. Thanks to the Go community for providing excellent documentation and support.
