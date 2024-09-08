@@ -59,11 +59,11 @@ Changes "a" to "an" when followed by a word starting with a vowel or "h".
 Run the tool using:
 
 ```bash
-$ cd cmd
+cd cmd
 ```
 
 ```bash
-$ go run main.go input.txt output.txt
+go run main.go input.txt output.txt
 ```
 
 ## 🧪 Testing
@@ -73,7 +73,7 @@ bash
 Copy code
 
 ```bash
-$ go test
+go test
 ```
 > 💡 Unit testing ensures your tool works as expected under various scenarios. It’s highly recommended to write tests for every major feature.
 
