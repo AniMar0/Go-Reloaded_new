@@ -55,37 +55,55 @@ func Modifications(Data string, Line, total int) (string, error) {
 			}
 		case choice == 3 || all == 3:
 			//("You selected: Convert words to uppercase (up).")
-			Data, err = Low_Up_Cap(Data, "(up)")
+			Data, err = Low_Up_Cap_Specified(Data)
+			if err != nil {
+				return "", err
+			}
 			if all != 0 {
 				all++
 			}
 		case choice == 4 || all == 4:
 			//("You selected: Convert words to lowercase (low).")
-			Data, err = Low_Up_Cap(Data, "(low)")
+			Data, err = Low_Up_Cap_Specified(Data)
+			if err != nil {
+				return "", err
+			}
 			if all != 0 {
 				all++
 			}
 		case choice == 5 || all == 5:
 			//("You selected: Capitalize the first letter of words (cap).")
-			Data, err = Low_Up_Cap(Data, "(cap)")
+			Data, err = Low_Up_Cap_Specified(Data)
+			if err != nil {
+				return "", err
+			}
 			if all != 0 {
 				all++
 			}
 		case choice == 6 || all == 6:
 			//("You selected: Apply (low), (up), (cap) to a specified number of words.")
 			Data, err = Low_Up_Cap_Specified(Data)
+			if err != nil {
+				return "", err
+			}
 			if all != 0 {
 				all++
 			}
 		case choice == 7 || all == 7:
 			//("You selected: Adjust spaces between punctuation and words.")
 			Data = Punctuations(SplitPunctuations(Data))
+			if err != nil {
+				return "", err
+			}
 			if all != 0 {
 				all++
 			}
 		case choice == 8 || all == 8:
 			//("You selected: Adjust quotes (' ') around words.")
 			Data = Single_Cote(Data)
+			if err != nil {
+				return "", err
+			}
 			if all != 0 {
 				all++
 			}

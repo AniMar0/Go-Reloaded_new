@@ -11,37 +11,70 @@ func Low_Up_Cap_Specified(Data string) (string, error) {
 	New_Data_Slices := []string{}
 	var err error
 	for i, word := range Data_Slices {
-		if i > 0 {
-			_, Type, _ := SplitByPrefixSuffix(word, "(", ")")
-			Type = "(" + Type + ")"
-			switch {
-			case strings.HasPrefix(word, "(low,"):
-				if word != Type {
-					return "", errors.New("Santax Error " + word)
-				}
-				ModifyWords(New_Data_Slices, Read_number(word), Low)
-				word = strings.ReplaceAll(word, Type, "")
-				New_Data_Slices = append(New_Data_Slices, word)
 
-			case strings.HasPrefix(word, "(up,"):
-				if word != Type {
-					return "", errors.New("Santax Error " + word)
-				}
-				ModifyWords(New_Data_Slices, Read_number(word), Up)
-				word = strings.ReplaceAll(word, Type, "")
-				New_Data_Slices = append(New_Data_Slices, word)
+		_, Type, _ := SplitByPrefixSuffix(word, "(", ")")
+		Type = "(" + Type + ")"
+		switch {
 
-			case strings.HasPrefix(word, "(cap,"):
-				if word != Type {
-					return "", errors.New("Santax Error " + word)
-				}
-				ModifyWords(New_Data_Slices, Read_number(word), Capit)
-				word = strings.ReplaceAll(word, Type, "")
-				New_Data_Slices = append(New_Data_Slices, word)
-			default:
-				New_Data_Slices = append(New_Data_Slices, word)
+		case strings.HasPrefix(word, "(low"):
+			if i == 0 {
+				err = errors.New("Error noting before " + Type)
+				return "", err
 			}
-		} else {
+
+			number := Read_number(word)
+			if number > len(New_Data_Slices) {
+				err = errors.New("the number of word != number in flage " + Type)
+				return "", err
+			}
+
+			if word != Type && number <= len(New_Data_Slices) {
+				return "", errors.New("Santax Error " + word)
+			}
+
+			ModifyWords(New_Data_Slices, number, Low)
+			word = strings.ReplaceAll(word, Type, "")
+			New_Data_Slices = append(New_Data_Slices, word)
+			//----------------
+		case strings.HasPrefix(word, "(up"):
+			if i == 0 {
+				err = errors.New("Error noting before " + Type)
+				return "", err
+			}
+
+			number := Read_number(word)
+			if number > len(New_Data_Slices) {
+				err = errors.New("the number of word != number in flage " + Type)
+				return "", err
+			}
+
+			if word != Type {
+				return "", errors.New("Santax Error " + Type)
+			}
+			ModifyWords(New_Data_Slices, Read_number(word), Up)
+			word = strings.ReplaceAll(word, Type, "")
+			New_Data_Slices = append(New_Data_Slices, word)
+			//----------------
+
+		case strings.HasPrefix(word, "(cap"):
+			if i == 0 {
+				err = errors.New("Error noting before " + Type)
+				return "", err
+			}
+
+			number := Read_number(word)
+			if number > len(New_Data_Slices) {
+				err = errors.New("the number of word != number in flage " + Type)
+				return "", err
+			}
+
+			if word != Type {
+				return "", errors.New("Santax Error " + Type)
+			}
+			ModifyWords(New_Data_Slices, Read_number(word), Capit)
+			word = strings.ReplaceAll(word, Type, "")
+			New_Data_Slices = append(New_Data_Slices, word)
+		default:
 			New_Data_Slices = append(New_Data_Slices, word)
 		}
 	}

@@ -24,22 +24,20 @@ func Convert_To(Data, Bas string) (string, error) {
 	var err error
 
 	for i, word := range Data_Slices {
-		if strings.Contains(word, Bas) && i > 0 {
 
-			if word != Bas {
-				err = errors.New("Syntax Error " + word)
-				return "", err
-			}
-
+		switch {
+		case i == 0 && word == Bas:
+			err = errors.New("Syntax Error " + word)
+			return "", err
+		case word == Bas:
 			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], Bas)
 			if err != nil {
 				return "", err
 			}
-			word = strings.ReplaceAll(word, Bas, "")
-			New_Data_Slices = append(New_Data_Slices, word)
-		} else {
-			New_Data_Slices = append(New_Data_Slices, word)
 		}
+		word = strings.ReplaceAll(word, Bas, "")
+		New_Data_Slices = append(New_Data_Slices, word)
+
 	}
 
 	Data = strings.Join(New_Data_Slices, " ")
