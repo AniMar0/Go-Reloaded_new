@@ -7,7 +7,6 @@
 
 This project aims to create a **powerful tool** for text completion, editing, and auto-correction.
 The tool will help users automate tedious text modifications.
-You'll also gain auditing experience, as your project will be reviewed by peers, and you will review others' work as well.
 
 > 💡 **Tip**: Writing your own tests will not only help you audit others but also ensure your project is solid and error-free!
 
