@@ -1,8 +1,26 @@
 package reload
 
 import (
+	"errors"
 	"fmt"
+	"strconv"
+	"strings"
 )
+
+func Modifications_Control(Data string) (string, error) {
+	var err error
+	Data_slice := strings.Split(Data, "\n")
+	New_Data := ""
+	for i := 0; i < len(Data_slice); i++ {
+		Data, err = Modifications(Data_slice[i], i+1, len(Data_slice))
+		if err != nil {
+			err = errors.New("Error Line " + strconv.Itoa(i+1) + " : " + err.Error())
+			return "", err
+		}
+		New_Data += Data + "\n"
+	}
+	return New_Data, err
+}
 
 func Modifications(Data string, Line, total int) (string, error) {
 	var err error

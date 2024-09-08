@@ -2,7 +2,6 @@ package reload
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -34,7 +33,6 @@ func Convert_To(Data, Bas string) (string, error) {
 
 			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], Bas)
 			if err != nil {
-				fmt.Println(err)
 				return "", err
 			}
 			word = strings.ReplaceAll(word, Bas, "")
