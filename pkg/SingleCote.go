@@ -1,9 +1,10 @@
 package reload
 
-import "strings"
-
 func Single_Cote(content string) string {
 	new_content := Split_Single_Cote(content, "'")
+
+	println(new_content)
+
 	if len(new_content) == 0 {
 		return content
 	}
@@ -35,13 +36,19 @@ func Single_Cote(content string) string {
 }
 
 func Split_Single_Cote(s, sep string) []string {
-	parts := strings.Split(s, sep)
-	result := []string{}
-	for i, part := range parts {
-		result = append(result, part)
-		if i < len(parts)-1 {
-			result = append(result, sep) // Add separator back between parts
+	s += sep
+	Words := []string{}
+	add := false
+	for i, char := range s {
+		if add {
+			s = s[i:]
+			add = false
+		}
+		if char == '\'' {
+			Words = append(Words, s[:i])
+			Words = append(Words, "'")
+			add = true
 		}
 	}
-	return result
+	return Words
 }
