@@ -26,12 +26,23 @@ func Read_File() (string, error) {
 
 	// Using bufio.Scanner to read file line by line
 	var fileContent string
+	line_vide := 0
+	lines := 0
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
+		lines++
 		line := scanner.Text()
+		if line == "" {
+			line_vide++
+		}
 		fileContent += line + "\n"
 	}
-	fileContent = fileContent[:len(fileContent)-1]
+	if lines == line_vide {
+		return "", errors.New(" Noting to read ")
+	} else {
+		fileContent = fileContent[:len(fileContent)-1]
+	}
+
 	// Checking for scanning errors
 	if err := scanner.Err(); err != nil {
 		return "", err
