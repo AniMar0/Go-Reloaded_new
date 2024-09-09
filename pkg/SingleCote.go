@@ -10,6 +10,7 @@ func Single_Cote(content string) string {
 	str := ""
 
 	for _, arg := range new_content {
+		// println(arg)
 		if arg == "'" && !colon {
 			colon = true
 		} else if arg == "'" && colon {
@@ -19,7 +20,11 @@ func Single_Cote(content string) string {
 		if colon {
 			str += RemoveSpace(arg)
 		} else {
-			str += arg
+			if arg[len(arg)-1] != ' ' {
+				str += arg + " "
+			} else {
+				str += arg
+			}
 		}
 	}
 
@@ -27,25 +32,28 @@ func Single_Cote(content string) string {
 }
 
 func Split_Single_Cote(s, sep string) []string {
-	s += sep
 	Words := []string{}
 	last_index := 0
+	str := ""
 	for i, char := range s {
 		if char == '\'' {
-			if i == len(s)-1 {
-				Words = append(Words, s[last_index:])
-			} else if i > 0 && !isAlpha(rune(s[i-1])) && !isAlpha(rune(s[i+1])) {
-				Words = append(Words, s[last_index:i])
-				Words = append(Words, "'")
-				last_index = i + 1
-
-			} else if i == 0 {
+			if i == 0 {
 				Words = append(Words, string(char))
 				last_index = i + 1
+			} else if i > 0 && (!isAlpha(rune(s[i-1])) || !isAlpha(rune(s[i+1]))) {
+				str = s[last_index:i]
+				Words = append(Words, str)
+				Words = append(Words, "'")
+				str = ""
+				last_index = i + 1
+
 			}
 		}
+		if i == len(s)-1 {
+			str = s[last_index:]
+			Words = append(Words, str)
+		}
 	}
-	Words = append(Words, s[last_index:])
 
 	return Words
 }
