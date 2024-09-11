@@ -10,14 +10,14 @@ func AtoAn(s string) string {
 		if w == "a" {
 			if i != len(slice)-1 {
 				nextWord := strings.ToLower(slice[i+1])
-				if len(nextWord) > 0 && (nextWord[0] == 'a' || nextWord[0] == 'e' || nextWord[0] == 'i' || nextWord[0] == 'o' || nextWord[0] == 'u') {
+				if len(nextWord) > 0 && (nextWord[0] == 'a' || nextWord[0] == 'e' || nextWord[0] == 'i' || nextWord[0] == 'o' || nextWord[0] == 'u' || nextWord[0] == 'h') {
 					w = "an"
 				}
 			}
 		} else if w == "A" {
 			if i != len(slice)-1 {
 				nextWord := strings.ToLower(slice[i+1])
-				if len(nextWord) > 0 && (nextWord[0] == 'a' || nextWord[0] == 'e' || nextWord[0] == 'i' || nextWord[0] == 'o' || nextWord[0] == 'u') {
+				if len(nextWord) > 0 && (nextWord[0] == 'a' || nextWord[0] == 'e' || nextWord[0] == 'i' || nextWord[0] == 'o' || nextWord[0] == 'u' || nextWord[0] == 'h') {
 					w = "An"
 				}
 			}
@@ -29,4 +29,3 @@ func AtoAn(s string) string {
 	}
 	return result
 }
-

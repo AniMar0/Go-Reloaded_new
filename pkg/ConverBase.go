@@ -12,7 +12,7 @@ func Convert_By_Bas(Number, Bas string) (string, error) {
 	} else {
 		base = 2
 	}
-	conver, err := strconv.ParseInt(Number, base, 64)
+	conver, err := strconv.ParseInt(Number, base, 0)
 
 	return strconv.Itoa(int(conver)), err
 }
