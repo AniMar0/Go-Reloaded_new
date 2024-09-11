@@ -1,7 +1,6 @@
 package reload
 
 import (
-	"errors"
 	"strconv"
 	"strings"
 )
@@ -18,26 +17,29 @@ func Convert_By_Bas(Number, Bas string) (string, error) {
 	return strconv.Itoa(int(conver)), err
 }
 
-func Convert_To(Data, Bas string) (string, error) {
+func Convert_To(Data string) (string, error) {
 	Data_Slices := strings.Split(Data, " ")
 	New_Data_Slices := []string{}
 	var err error
 
 	for i, word := range Data_Slices {
-
+		if i == 0 && (word == "(hex)" || word == "(bin)") {
+			continue
+		}
 		switch {
-		case i == 0 && word == Bas:
-			err = errors.New("Syntax Error " + word)
-			return "", err
-		case word == Bas:
-			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], Bas)
-			word = strings.ReplaceAll(word, Bas, "")
+		case word == "(hex)":
+			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(New_Data_Slices[len(New_Data_Slices)-1], "(hex)")
 			if err != nil {
 				return "", err
 			}
+		case word == "(bin)":
+			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(New_Data_Slices[len(New_Data_Slices)-1], "(bin)")
+			if err != nil {
+				return "", err
+			}
+		default:
+			New_Data_Slices = append(New_Data_Slices, word)
 		}
-
-		New_Data_Slices = append(New_Data_Slices, word)
 	}
 
 	Data = strings.Join(New_Data_Slices, " ")

@@ -16,7 +16,7 @@ func main() {
 
 	Data, err = reload.Modifications_Control(Data)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprint(os.Stderr, err)
 		return
 	}
 

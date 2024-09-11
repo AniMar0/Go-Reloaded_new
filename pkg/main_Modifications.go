@@ -32,18 +32,10 @@ func Modifications(Data string, Line, total int) (string, error) {
 			}
 		}
 		switch {
-		case choice == 1 || all == 1:
-			//("You selected: Replace hexadecimal numbers (hex) with decimal.")
-			Data, err = Convert_To(Data, "(hex)")
-			if err != nil {
-				return "", err
-			}
-			if all != 0 {
-				all++
-			}
-		case choice == 2 || all == 2:
-			//("You selected: Replace binary numbers (bin) with decimal.")
-			Data, err = Convert_To(Data, "(bin)")
+		case choice == 1 || all == 1 || choice == 2 || all == 2:
+			//("You selected: Replace hexadecimal numbers (hex) with decimal.") // 1
+			//("You selected: Replace binary numbers (bin) with decimal.") // 2
+			Data, err = Convert_To(Data)
 			if err != nil {
 				return "", err
 			}
