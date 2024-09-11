@@ -2,6 +2,7 @@ package reload
 
 import (
 	"errors"
+	"strconv"
 	"strings"
 )
 
@@ -24,9 +25,10 @@ func Low_Up_Cap_Specified(Data string) (string, error) {
 			SliceOfData_New[len(SliceOfData_New)-1] = Capit(SliceOfData_New[len(SliceOfData_New)-1])
 
 		case strings.HasPrefix(word, "(low, ") && strings.HasSuffix(word, ")"):
-			SliceOfData_New = append(SliceOfData_New, "zabii")
+			// SliceOfData_New = append(SliceOfData_New, "xx")
 			isNumber, Number := IsDigit(word)
 			if !isNumber {
+				// print(Number)
 				SliceOfData_New = append(SliceOfData_New, word)
 				continue
 			} else if Number > len(SliceOfData_New) {
@@ -68,21 +70,15 @@ func Low_Up_Cap_Specified(Data string) (string, error) {
 
 func IsDigit(word string) (bool, int) {
 	if strings.HasPrefix(word, "(low, ") || strings.HasPrefix(word, "(cap, ") {
-		word = word[5 : len(word)-2]
+		word = word[6 : len(word)-1]
 	} else {
-		word = word[4 : len(word)-2]
+		word = word[5 : len(word)-1]
 	}
-	number := 0
-	isNumber := false
-	for _, digit := range word {
-		if digit >= 0 && digit <= 9 {
-			number = number*10 + int(digit-48)
-			isNumber = true
-		} else {
-			return false, 0
-		}
+	number, err := strconv.Atoi(word)
+	if err != nil {
+		return false, number
 	}
-	return isNumber, number
+	return true, number
 }
 
 func ChangeWord(words []string, Modife func(string) string, Number int) []string {
