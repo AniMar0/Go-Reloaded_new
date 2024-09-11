@@ -31,11 +31,12 @@ func Convert_To(Data, Bas string) (string, error) {
 			return "", err
 		case word == Bas:
 			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(Data_Slices[i-1], Bas)
+			word = strings.ReplaceAll(word, Bas, "")
 			if err != nil {
 				return "", err
 			}
 		}
-		word = strings.ReplaceAll(word, Bas, "")
+
 		New_Data_Slices = append(New_Data_Slices, word)
 	}
 

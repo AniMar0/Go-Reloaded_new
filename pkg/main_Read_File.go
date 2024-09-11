@@ -7,6 +7,7 @@ import (
 )
 
 func Read_File() (string, error) {
+	// for check if the Args like this : (programe name ) (inpute file with extention .exe) (outpout file with extention .exe)
 	Args := os.Args
 	if !isValidArg(Args) {
 		return "", errors.New("invalid Args")
@@ -26,8 +27,10 @@ func Read_File() (string, error) {
 
 	// Using bufio.Scanner to read file line by line
 	var fileContent string
-	line_vide := 0
-	lines := 0
+
+	line_vide := 0 // for now how many line(s) vide
+	lines := 0     // for now how many line(s) in the file
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		lines++
@@ -64,11 +67,5 @@ func isvalidExt(file_name string) bool {
 }
 
 func isValidArg(args []string) bool {
-	if len(args) != 3 {
-		return false
-	}
-	if isvalidExt(args[1]) && isvalidExt(args[2]) {
-		return true
-	}
-	return false
+	return len(args) == 3 && isvalidExt(args[1]) && isvalidExt(args[2])
 }

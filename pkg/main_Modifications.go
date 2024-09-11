@@ -1,9 +1,7 @@
 package reload
 
 import (
-	"errors"
 	"fmt"
-	"strconv"
 	"strings"
 )
 
@@ -14,8 +12,7 @@ func Modifications_Control(Data string) (string, error) {
 	for i := 0; i < len(Data_slice); i++ {
 		Data, err = Modifications(Data_slice[i], i+1, len(Data_slice))
 		if err != nil {
-			err = errors.New("Error Line " + strconv.Itoa(i+1) + " : " + err.Error())
-			return "", err
+			return "", fmt.Errorf("error Line %d : %s", i+1, err.Error())
 		}
 		New_Data += Data + "\n"
 	}

@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"unicode"
 )
 
 func SplitByPrefixSuffix(s, prefix, suffix string) (string, string, string) {
@@ -49,43 +50,82 @@ func isAlpha(char rune) bool {
 	return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')
 }
 
-func Split_Low_Up_Cap(str string) []string {
-	NewStr := ""
-	str += " "
-	slisce := []string{}
-	bracket := false
-
-	for _, char := range str {
-		if char == '(' {
-			bracket = true
-		} else if char == ')' {
-			bracket = false
-		}
-		if char == ' ' && NewStr != "" && !bracket {
-			slisce = append(slisce, NewStr)
-			NewStr = ""
-		} else if char != ' ' {
-			NewStr += string(char)
-		}
-	}
-
-	return slisce
+func SplitUpCapLow(s string) []string {
+    var arr []string
+    var wordStart int
+    inWord := false
+    bracket := false
+    for i, char := range s {
+        if char == '(' {
+            bracket = true
+        } else if char == ')' {
+            bracket = false
+        }
+        if char == ' ' && !bracket {
+            if inWord {
+                arr = append(arr, s[wordStart:i])
+                inWord = false
+            }
+        } else {
+            if !inWord {
+                wordStart = i
+                inWord = true
+            }
+        }
+    }
+    if inWord {
+        arr = append(arr, s[wordStart:])
+    }
+    return arr
 }
 
 func Low(word string) string {
-	return strings.ToLower(word)
+	low_word := ""
+	for _, char := range word {
+		low_word += string(unicode.ToLower(char))
+	}
+	return low_word
 }
 
 func Up(word string) string {
-	return strings.ToUpper(word)
+	up_word := ""
+	for _, char := range word {
+		up_word += string(unicode.ToUpper(char))
+	}
+	return up_word
 }
 
 func Capit(word string) string {
 	cap_word := ""
-	if len(word) == 0 || isAlpha(rune(word[0])) {
-		// return "", errors.New("You can't capitalize the word: " + word)
-		cap_word = strings.ToUpper(string(word[0])) + word[1:]
+	for i, char := range word {
+		if i == 0 {
+			cap_word += string(unicode.ToUpper(char))
+		} else {
+			cap_word += string(unicode.ToLower(char))
+		}
 	}
-
 	return cap_word
+}
+
+func SplitWhiteSpace(s string) []string {
+	var arr []string
+	var wordStart int
+	inWord := false
+	for i, char := range s {
+		if char == ' ' {
+			if inWord {
+				arr = append(arr, s[wordStart:i])
+				inWord = false
+			}
+		} else {
+			if !inWord {
+				wordStart = i
+				inWord = true
+			}
+		}
+	}
+	if inWord {
+		arr = append(arr, s[wordStart:])
+	}
+	return arr
 }

@@ -30,25 +30,3 @@ func AtoAn(s string) string {
 	return result
 }
 
-func SplitWhiteSpace(s string) []string {
-	var arr []string
-	var wordStart int
-	inWord := false
-	for i, char := range s {
-		if char == ' ' {
-			if inWord {
-				arr = append(arr, s[wordStart:i])
-				inWord = false
-			}
-		} else {
-			if !inWord {
-				wordStart = i
-				inWord = true
-			}
-		}
-	}
-	if inWord {
-		arr = append(arr, s[wordStart:])
-	}
-	return arr
-}

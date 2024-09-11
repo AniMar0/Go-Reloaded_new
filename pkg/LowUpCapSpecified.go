@@ -2,103 +2,92 @@ package reload
 
 import (
 	"errors"
-	"strconv"
 	"strings"
 )
 
 func Low_Up_Cap_Specified(Data string) (string, error) {
-	Data_Slices := Split_Low_Up_Cap(Data)
-	New_Data_Slices := []string{}
-	var err error
-	for i, word := range Data_Slices {
-
-		_, Type, _ := SplitByPrefixSuffix(word, "(", ")")
-		Type = "(" + Type + ")"
+	SliceOfData := SplitUpCapLow(Data)
+	SliceOfData_New := []string{}
+	for i, word := range SliceOfData {
+		if i == 0 && (word == "(low)" || word == "(up)" || word == "(cap)" || strings.HasPrefix(word, "(low, ") || strings.HasPrefix(word, "(up, ") || strings.HasPrefix(word, "(cap, ")) {
+			continue
+		}
+		// println(word+"***")
 		switch {
+		case word == "(low)":
+			SliceOfData_New[len(SliceOfData_New)-1] = Low(SliceOfData_New[len(SliceOfData_New)-1])
 
-		case strings.HasPrefix(word, "(low"):
-			if i == 0 {
-				err = errors.New("Error noting before " + Type)
-				return "", err
+		case word == "(up)":
+			SliceOfData_New[len(SliceOfData_New)-1] = Up(SliceOfData_New[len(SliceOfData_New)-1])
+
+		case word == "(cap)":
+			SliceOfData_New[len(SliceOfData_New)-1] = Capit(SliceOfData_New[len(SliceOfData_New)-1])
+
+		case strings.HasPrefix(word, "(low, ") && strings.HasSuffix(word, ")"):
+			SliceOfData_New = append(SliceOfData_New, "zabii")
+			isNumber, Number := IsDigit(word)
+			if !isNumber {
+				SliceOfData_New = append(SliceOfData_New, word)
+				continue
+			} else if Number > len(SliceOfData_New) {
+				return "", errors.New("error : the number of words you want to lower is more than Number of the words before the flag")
 			}
 
-			number := Read_number(word)
-			if number > len(New_Data_Slices) {
-				err = errors.New("the number of word != number in flage " + Type)
-				return "", err
+			SliceOfData_New = ChangeWord(SliceOfData_New, Low, Number)
+
+		case strings.HasPrefix(word, "(up, ") && strings.HasSuffix(word, ")"):
+			isNumber, Number := IsDigit(word)
+			if !isNumber {
+				SliceOfData_New = append(SliceOfData_New, word)
+				continue
+			} else if Number > len(SliceOfData_New) {
+				return "", errors.New("error : the number of words you want to lower is more than Number of the words before the flag")
 			}
 
-			if word != Type && number <= len(New_Data_Slices) {
-				return "", errors.New("Santax Error " + word)
+			SliceOfData_New = ChangeWord(SliceOfData_New, Up, Number)
+		case strings.HasPrefix(word, "(cap, ") && strings.HasSuffix(word, ")"):
+			isNumber, Number := IsDigit(word)
+			if !isNumber {
+				SliceOfData_New = append(SliceOfData_New, word)
+				continue
+			} else if Number > len(SliceOfData_New) {
+				return "", errors.New("error : the number of words you want to lower is more than Number of the words before the flag")
 			}
 
-			ModifyWords(New_Data_Slices, number, Low)
-			word = strings.ReplaceAll(word, Type, "")
-			New_Data_Slices = append(New_Data_Slices, word)
-			//----------------
-		case strings.HasPrefix(word, "(up"):
-			if i == 0 {
-				err = errors.New("Error noting before " + Type)
-				return "", err
-			}
-
-			number := Read_number(word)
-			if number > len(New_Data_Slices) {
-				err = errors.New("the number of word != number in flage " + Type)
-				return "", err
-			}
-
-			if word != Type {
-				return "", errors.New("Santax Error " + Type)
-			}
-			ModifyWords(New_Data_Slices, Read_number(word), Up)
-			word = strings.ReplaceAll(word, Type, "")
-			New_Data_Slices = append(New_Data_Slices, word)
-			//----------------
-
-		case strings.HasPrefix(word, "(cap"):
-			if i == 0 {
-				err = errors.New("Error noting before " + Type)
-				return "", err
-			}
-
-			number := Read_number(word)
-			if number > len(New_Data_Slices) {
-				err = errors.New("the number of word != number in flage " + Type)
-				return "", err
-			}
-
-			if word != Type {
-				return "", errors.New("Santax Error " + Type)
-			}
-			ModifyWords(New_Data_Slices, Read_number(word), Capit)
-			word = strings.ReplaceAll(word, Type, "")
-			New_Data_Slices = append(New_Data_Slices, word)
+			SliceOfData_New = ChangeWord(SliceOfData_New, Capit, Number)
 		default:
-			New_Data_Slices = append(New_Data_Slices, word)
+			SliceOfData_New = append(SliceOfData_New, word)
+
 		}
 	}
 
-	Data = strings.Join(New_Data_Slices, " ")
-	return Data, err
+	Data = strings.Join(SliceOfData_New, " ")
+
+	return Data, nil
 }
 
-func Read_number(content string) int {
+func IsDigit(word string) (bool, int) {
+	if strings.HasPrefix(word, "(low, ") || strings.HasPrefix(word, "(cap, ") {
+		word = word[5 : len(word)-2]
+	} else {
+		word = word[4 : len(word)-2]
+	}
 	number := 0
-	for _, char := range content {
-		if char >= '0' && char <= '9' {
-			new_number, _ := strconv.Atoi(string(rune(char)))
-			number = number*10 + new_number
+	isNumber := false
+	for _, digit := range word {
+		if digit >= 0 && digit <= 9 {
+			number = number*10 + int(digit-48)
+			isNumber = true
+		} else {
+			return false, 0
 		}
 	}
-	if number == 0 {
-		return 1
-	}
-	return number
+	return isNumber, number
 }
 
-func ModifyWords(content []string, number int, transformFunc func(string) string) {
-	for i := len(content) - number; i < len(content); i++ {
-		content[i] = transformFunc(content[i])
+func ChangeWord(words []string, Modife func(string) string, Number int) []string {
+	for i := len(words) - Number; i < len(words); i++ {
+		words[i] = Modife(words[i])
 	}
+	return words
 }

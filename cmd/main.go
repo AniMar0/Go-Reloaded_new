@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	reload "reload/pkg"
 )
@@ -9,7 +10,7 @@ import (
 func main() {
 	Data, err := reload.Read_File()
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprint(os.Stderr, err)
 		return
 	}
 
