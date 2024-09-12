@@ -6,38 +6,43 @@ import (
 	"strings"
 )
 
-func Low_Up_Cap_Specified(Data string) (string, error) {
+func LUC(Data []string, Number int, luc func(string) string) []string {
+	for i := len(Data) - 1; i >= len(Data)-Number; i-- {
+		if !flags.checkFlag(Data[i]) {
+			Data[i] = luc(Data[i])
+		} else {
+			Number++
+		}
+	}
+	return Data
+}
+
+func Low_Up_Cap_Specified(Data string, up, low, cap bool) (string, error) {
 	SliceOfData := SplitUpCapLow(Data)
+	SliceOfData = Clean(SliceOfData)
 	SliceOfData_New := []string{}
 	for i, word := range SliceOfData {
-		if i == 0 && (word == "(low)" || word == "(up)" || word == "(cap)" || strings.HasPrefix(word, "(low, ") || strings.HasPrefix(word, "(up, ") || strings.HasPrefix(word, "(cap, ")) {
-			continue
-		}
-		// println(word+"***")
 		switch {
-		case word == "(low)":
-			SliceOfData_New[len(SliceOfData_New)-1] = Low(SliceOfData_New[len(SliceOfData_New)-1])
-
-		case word == "(up)":
-			SliceOfData_New[len(SliceOfData_New)-1] = Up(SliceOfData_New[len(SliceOfData_New)-1])
-
-		case word == "(cap)":
-			SliceOfData_New[len(SliceOfData_New)-1] = Capit(SliceOfData_New[len(SliceOfData_New)-1])
-
-		case strings.HasPrefix(word, "(low, ") && strings.HasSuffix(word, ")"):
-			// SliceOfData_New = append(SliceOfData_New, "xx")
-			isNumber, Number := IsDigit(word)
-			if !isNumber {
-				// print(Number)
-				SliceOfData_New = append(SliceOfData_New, word)
+		case flags.lowFlag(word) && (!up && low && !cap):
+			if i == 0 {
 				continue
-			} else if Number > len(SliceOfData_New) {
-				return "", errors.New("error : the number of words you want to lower is more than Number of the words before the flag")
 			}
+			SliceOfData_New = LUC(SliceOfData_New, 1, Low)
+		case flags.upFlag(word) && (up && !low && !cap):
+			if i == 0 {
+				continue
+			}
+			SliceOfData_New = LUC(SliceOfData_New, 1, Up)
+		case flags.capFlag(word) && (!up && !low && cap):
+			if i == 0 {
+				continue
+			}
+			SliceOfData_New = LUC(SliceOfData_New, 1, Capit)
 
-			SliceOfData_New = ChangeWord(SliceOfData_New, Low, Number)
-
-		case strings.HasPrefix(word, "(up, ") && strings.HasSuffix(word, ")"):
+		case flags.lowSpecified(word) && (up && cap && low):
+			if i == 0 {
+				continue
+			}
 			isNumber, Number := IsDigit(word)
 			if !isNumber {
 				SliceOfData_New = append(SliceOfData_New, word)
@@ -46,8 +51,11 @@ func Low_Up_Cap_Specified(Data string) (string, error) {
 				return "", errors.New("error : the number of words you want to lower is more than Number of the words before the flag")
 			}
 
-			SliceOfData_New = ChangeWord(SliceOfData_New, Up, Number)
-		case strings.HasPrefix(word, "(cap, ") && strings.HasSuffix(word, ")"):
+			SliceOfData_New = LUC(SliceOfData_New, Number, Low)
+		case flags.upSpecified(word) && (up && cap && low):
+			if i == 0 {
+				continue
+			}
 			isNumber, Number := IsDigit(word)
 			if !isNumber {
 				SliceOfData_New = append(SliceOfData_New, word)
@@ -56,7 +64,21 @@ func Low_Up_Cap_Specified(Data string) (string, error) {
 				return "", errors.New("error : the number of words you want to lower is more than Number of the words before the flag")
 			}
 
-			SliceOfData_New = ChangeWord(SliceOfData_New, Capit, Number)
+			SliceOfData_New = LUC(SliceOfData_New, Number, Up)
+		case flags.capSpecified(word) && (up && cap && low):
+			if i == 0 {
+				continue
+			}
+			isNumber, Number := IsDigit(word)
+			if !isNumber {
+				SliceOfData_New = append(SliceOfData_New, word)
+				continue
+			} else if Number > len(SliceOfData_New) {
+				return "", errors.New("error : the number of words you want to lower is more than Number of the words before the flag")
+			}
+
+			SliceOfData_New = LUC(SliceOfData_New, Number, Capit)
+
 		default:
 			SliceOfData_New = append(SliceOfData_New, word)
 
@@ -69,7 +91,7 @@ func Low_Up_Cap_Specified(Data string) (string, error) {
 }
 
 func IsDigit(word string) (bool, int) {
-	if strings.HasPrefix(word, "(low, ") || strings.HasPrefix(word, "(cap, ") {
+	if flags.lowSpecified(word) || flags.capSpecified(word) {
 		word = word[6 : len(word)-1]
 	} else {
 		word = word[5 : len(word)-1]
@@ -79,11 +101,4 @@ func IsDigit(word string) (bool, int) {
 		return false, number
 	}
 	return true, number
-}
-
-func ChangeWord(words []string, Modife func(string) string, Number int) []string {
-	for i := len(words) - Number; i < len(words); i++ {
-		words[i] = Modife(words[i])
-	}
-	return words
 }

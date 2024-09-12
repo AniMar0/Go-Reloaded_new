@@ -5,35 +5,45 @@ import (
 	"strings"
 )
 
-func Convert_By_Bas(Number, Bas string) (string, error) {
+func Convert_By_Bas(Data []string, Bas string) ([]string, error) {
 	var base int
-	if Bas == "(hex)" {
+
+	if flags.hexFlag(Bas) {
 		base = 16
-	} else {
+	} else if flags.binFlag(Bas) {
 		base = 2
 	}
-	conver, err := strconv.ParseInt(Number, base, 0)
-
-	return strconv.Itoa(int(conver)), err
+	for i := len(Data) - 1; i >= 0; i-- {
+		if !flags.checkFlag(Data[i]) {
+			conver, err := strconv.ParseInt(Data[i], base, 0)
+			Data[i] = strconv.Itoa(int(conver))
+			return Data, err
+		}
+	}
+	return Data, nil
 }
 
-func Convert_To(Data string) (string, error) {
+func Convert_To(Data, Type string) (string, error) {
 	Data_Slices := strings.Split(Data, " ")
+	Data_Slices = Clean(Data_Slices)
 	New_Data_Slices := []string{}
 	var err error
 
 	for i, word := range Data_Slices {
-		if i == 0 && (word == "(hex)" || word == "(bin)") {
-			continue
-		}
 		switch {
-		case word == "(hex)":
-			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(New_Data_Slices[len(New_Data_Slices)-1], "(hex)")
+		case flags.hexFlag(word) && word == Type:
+			if i == 0 {
+				continue
+			}
+			New_Data_Slices, err = Convert_By_Bas(New_Data_Slices, flags.hex)
 			if err != nil {
 				return "", err
 			}
-		case word == "(bin)":
-			New_Data_Slices[len(New_Data_Slices)-1], err = Convert_By_Bas(New_Data_Slices[len(New_Data_Slices)-1], "(bin)")
+		case flags.binFlag(word) && word == Type:
+			if i == 0 {
+				continue
+			}
+			New_Data_Slices, err = Convert_By_Bas(New_Data_Slices, flags.bin)
 			if err != nil {
 				return "", err
 			}
@@ -45,3 +55,4 @@ func Convert_To(Data string) (string, error) {
 	Data = strings.Join(New_Data_Slices, " ")
 	return Data, err
 }
+

@@ -6,7 +6,7 @@ import (
 
 func Modifications_Menu(Line, total int) int {
 	var choice int
-	system := "linux" // or can be "linux" based on the system
+	system := "windows" // or can be "linux" based on the system
 	Clear_Console(system)
 
 	fmt.Println("****************************************")
@@ -23,17 +23,18 @@ func Modifications_Menu(Line, total int) int {
 	fmt.Println(" [7] Adjust spaces between punctuation and words")
 	fmt.Println(" [8] Adjust single quotes (' ') around words")
 	fmt.Println(" [9] Replace 'a' with 'an' if the next word starts with a vowel or 'h'")
+	fmt.Println(" [11] Make Copy")
 	fmt.Println(" [10] Exit")
 	fmt.Println("****************************************")
 
 	for {
-		fmt.Println("Please select the modification you want to apply (0-10): ")
+		fmt.Println("Please select the modification you want to apply (0-11): ")
 		fmt.Scan(&choice)
-		if choice >= 0 && choice <= 10 {
+		if choice >= 0 && choice <= 11 {
 			Clear_Console(system)
 			return choice
 		} else {
-			fmt.Println("Invalid choice. Please enter a number between 0 and 10.")
+			fmt.Println("Invalid choice. Please enter a number between 0 and 11.")
 		}
 	}
 }

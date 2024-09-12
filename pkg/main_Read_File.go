@@ -7,7 +7,7 @@ import (
 )
 
 func Read_File() (string, error) {
-	// for check if the Args like this : (programe name ) (inpute file with extention .exe) (outpout file with extention .exe)
+	// for check if the Args like this : (programe name ) (inpute file with extention .txt) (outpout file with extention .txt)
 	Args := os.Args
 	if !isValidArg(Args) {
 		return "", errors.New("invalid Args")
@@ -40,6 +40,7 @@ func Read_File() (string, error) {
 		}
 		fileContent += line + "\n"
 	}
+	
 	if lines == line_vide {
 		return "", errors.New(" Noting to read ")
 	} else {

@@ -51,32 +51,32 @@ func isAlpha(char rune) bool {
 }
 
 func SplitUpCapLow(s string) []string {
-    var arr []string
-    var wordStart int
-    inWord := false
-    bracket := false
-    for i, char := range s {
-        if char == '(' {
-            bracket = true
-        } else if char == ')' {
-            bracket = false
-        }
-        if char == ' ' && !bracket {
-            if inWord {
-                arr = append(arr, s[wordStart:i])
-                inWord = false
-            }
-        } else {
-            if !inWord {
-                wordStart = i
-                inWord = true
-            }
-        }
-    }
-    if inWord {
-        arr = append(arr, s[wordStart:])
-    }
-    return arr
+	var arr []string
+	var wordStart int
+	inWord := false
+	bracket := false
+	for i, char := range s {
+		if char == '(' {
+			bracket = true
+		} else if char == ')' {
+			bracket = false
+		}
+		if char == ' ' && !bracket {
+			if inWord {
+				arr = append(arr, s[wordStart:i])
+				inWord = false
+			}
+		} else {
+			if !inWord {
+				wordStart = i
+				inWord = true
+			}
+		}
+	}
+	if inWord {
+		arr = append(arr, s[wordStart:])
+	}
+	return arr
 }
 
 func Low(word string) string {
@@ -128,4 +128,14 @@ func SplitWhiteSpace(s string) []string {
 		arr = append(arr, s[wordStart:])
 	}
 	return arr
+}
+
+func Clean(Data []string) []string {
+	var newData []string
+	for _, word := range Data {
+		if word != "" {
+			newData = append(newData, word)
+		}
+	}
+	return newData
 }
