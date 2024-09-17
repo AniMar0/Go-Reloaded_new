@@ -1,8 +1,8 @@
 package reload
 
 import (
+	"strconv"
 	"strings"
-	"unicode"
 )
 
 type Flags struct {
@@ -43,45 +43,54 @@ func (f *Flags) hexFlag(flag string) bool {
 }
 
 func (f *Flags) capSpecified(flag string) bool {
-	return strings.HasPrefix(flag, "(cap, ") && strings.HasSuffix(flag, ")")
+	if !strings.HasPrefix(flag, "(cap, ") || !strings.HasSuffix(flag, ")") {
+		return false
+	}
+
+	content := flag[len("(cap, ") : len(flag)-1]
+
+	trimmedContent := strings.TrimSpace(content)
+
+	_, err := strconv.Atoi(trimmedContent)
+	if err != nil  {
+		return false
+	}else{
+		return true
+	}
 }
 
 func (f *Flags) upSpecified(flag string) bool {
-	return strings.HasPrefix(flag, "(up, ") && strings.HasSuffix(flag, ")")
+	if !strings.HasPrefix(flag, "(up, ") || !strings.HasSuffix(flag, ")") {
+		return false
+	}
+
+	content := flag[len("(up, ") : len(flag)-1]
+
+	trimmedContent := strings.TrimSpace(content)
+
+	_, err := strconv.Atoi(trimmedContent)
+	if err != nil  {
+		return false
+	}else{
+		return true
+	}
 }
 
 func (f *Flags) lowSpecified(flag string) bool {
-	return strings.HasPrefix(flag, "(low, ") && strings.HasSuffix(flag, ")")
-}
-
-func (f *Flags) skipPonc(word string) bool {
-	for _, char := range word {
-		if unicode.IsLetter(rune(char)) {
-			return false
-		}
-	}
-	return true
-}
-
-func (f *Flags) checkFlag(flag string) bool {
-	checkFuncs := []func(string) bool{
-		f.upFlag,
-		f.lowFlag,
-		f.capFlag,
-		f.binFlag,
-		f.hexFlag,
-		f.capSpecified,
-		f.upSpecified,
-		f.lowSpecified,
-		f.skipPonc,
+	if !strings.HasPrefix(flag, "(low, ") || !strings.HasSuffix(flag, ")") {
+		return false
 	}
 
-	for _, checkFunc := range checkFuncs {
-		if checkFunc(flag) {
-			return true
-		}
+	content := flag[len("(low, ") : len(flag)-1]
+
+	trimmedContent := strings.TrimSpace(content)
+
+	_, err := strconv.Atoi(trimmedContent)
+	if err != nil  {
+		return false
+	}else{
+		return true
 	}
-	return false
 }
 
 func (f *Flags) isFlag(flag string) bool {

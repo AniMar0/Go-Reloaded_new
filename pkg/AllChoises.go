@@ -1,38 +1,60 @@
 package reload
 
 import (
+	"fmt"
 	"strings"
 )
 
-func All(Data []string) (int, string) {
+func All_Control(Data string) (string, error) {
+	var err error
+	Data_slice := strings.Split(Data, "\n")
+	New_Data := ""
+	for i := 0; i < len(Data_slice); i++ {
+		Data, err = ApplayAllModif(Data_slice[i])
+		if err != nil {
+			return "", fmt.Errorf("error Line %d : %s", i+1, err.Error())
+		}
+		if i < len(Data_slice)-1 {
+			New_Data += Data + "\n"
+		} else {
+			New_Data += Data
+		}
+	}
+	return New_Data, err
+}
+
+func All(Data []string) ([]string, []string, string) {
 	for i, Word := range Data {
 		if flags.isFlag(Word) {
 			if i < len(Data)-1 {
-				return i + 1, Word
+				return Data[:i+1], Data[i+1:], Word
 			} else {
-				return i, Word
+				return Data, nil, Word
 			}
 		}
 	}
-	return 0, ""
+	return Data, nil, "EptyZaki001+"
 }
 
-func joinToParts(Data []string, index int) (string, string) {
-	parte1 := strings.Join(Data[:index], " ")
-	parte2 := strings.Join(Data[index:], " ")
-	return parte1, parte2
+func joinToParts(Part1, Part2 []string) (string, string) {
+	part1 := strings.Join(Part1, " ")
+	if Part2 == nil {
+		return part1, ""
+	}
+	part2 := strings.Join(Part2, " ")
+	return part1, part2
 }
 
 func ApplayAllModif(Data string) (string, error) {
 	var err error
-	part1, part2 := "", ""
+
 	for {
-		cleanData := SplitUpCapLow(Data)
+		part1, part2 := "", ""
+		cleanData := SplitLowUpCap(Data)
 		cleanData = Clean(cleanData)
-		index, flag := All(cleanData)
-		if index != 0 && flag != "" {
-			part1, part2 = joinToParts(cleanData, index)
-		}
+
+		Part1, Part2, flag := All(cleanData)
+		part1, part2 = joinToParts(Part1, Part2)
 
 		switch {
 		case flags.hexFlag(flag):
@@ -48,42 +70,34 @@ func ApplayAllModif(Data string) (string, error) {
 				return "", err
 			}
 		case flags.upFlag(flag):
-			up, low, cap := true, true, true
-			Data, err = Low_Up_Cap_Specified(part1, up, !low, !cap)
+			Data, err = Low_Up_Cap_Specified(part1)
 			Data += " " + part2
 			if err != nil {
 				return "", err
 			}
 		case flags.lowFlag(flag):
-			up, low, cap := true, true, true
-			Data, err = Low_Up_Cap_Specified(part1, !up, low, !cap)
+			Data, err = Low_Up_Cap_Specified(part1)
 			Data += " " + part2
 			if err != nil {
 				return "", err
 			}
 		case flags.capFlag(flag):
-			up, low, cap := true, true, true
-			Data, err = Low_Up_Cap_Specified(part1, !up, !low, cap)
+			Data, err = Low_Up_Cap_Specified(part1)
 			Data += " " + part2
 			if err != nil {
 				return "", err
 			}
 		case flags.capSpecified(flag) || flags.upSpecified(flag) || flags.lowSpecified(flag):
-			up, low, cap := true, true, true
-			Data, err = Low_Up_Cap_Specified(Data, up, low, cap)
+			Data, err = Low_Up_Cap_Specified(part1)
 			Data += " " + part2
 			if err != nil {
 				return "", err
 			}
 		case !flags.isFlag(flag):
-			Data = Data[:len(Data)-len(part2)]
+			Data = part1
 			Data = Punctuations(SplitPunctuations(Data))
-			if err != nil {
-				return "", err
-			}
 			Data = Single_Cote(Data)
 			Data = AtoAn(Data)
-
 			return Data, err
 		}
 	}

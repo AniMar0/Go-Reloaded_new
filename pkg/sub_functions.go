@@ -7,25 +7,6 @@ import (
 	"unicode"
 )
 
-func SplitByPrefixSuffix(s, prefix, suffix string) (string, string, string) {
-	startIndex := strings.Index(s, prefix)
-	if startIndex == -1 {
-		return s, "", ""
-	}
-	startIndex += len(prefix)
-
-	endIndex := strings.LastIndex(s, suffix)
-	if endIndex == -1 || endIndex < startIndex {
-		return s, "", ""
-	}
-
-	before := s[:startIndex-len(prefix)]
-	middle := s[startIndex:endIndex]
-	after := s[endIndex+len(suffix):]
-
-	return before, middle, after
-}
-
 func Clear_Console(system string) {
 	// For Unix/Linux
 	if system == "linux" {
@@ -46,37 +27,50 @@ func RemoveSpace(str string) string {
 	return strings.TrimSpace(str)
 }
 
-func isAlpha(char rune) bool {
-	return (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')
+func RemoveSpaceFlag(flag string) string {
+	str := ""
+	for _, digit := range flag {
+		if digit != ' ' {
+			str += string(digit)
+		}
+	}
+	return str
 }
 
-func SplitUpCapLow(s string) []string {
-	var arr []string
-	var wordStart int
-	inWord := false
-	bracket := false
-	for i, char := range s {
-		if char == '(' {
-			bracket = true
-		} else if char == ')' {
-			bracket = false
-		}
-		if char == ' ' && !bracket {
-			if inWord {
-				arr = append(arr, s[wordStart:i])
-				inWord = false
+func SplitLowUpCap(Data string) []string {
+	slice := Clean(strings.Split(Data, " "))
+
+	var result []string
+
+	for i := 0; i < len(slice); i++ {
+		word := slice[i]
+		if i < len(slice)-1 {
+			flag := word + " " + slice[i+1]
+			if flags.isFlag(flag) {
+				result = append(result, flag)
+				i++
+			} else if i+2 < len(slice)-1 && flags.isFlag(flag+slice[i+2]) {
+				result = append(result, flag+slice[i+2])
+				i += 2
+			} else {
+				result = append(result, word)
 			}
+		}
+	}
+	if len(slice) >= 2 {
+		lastWord := slice[len(slice)-2] + " " + slice[len(slice)-1]
+
+		if flags.isFlag(slice[len(slice)-2] + " " + slice[len(slice)-1]) {
+			result = result[:len(result)-1]
+			result = append(result, lastWord)
 		} else {
-			if !inWord {
-				wordStart = i
-				inWord = true
-			}
+			result = append(result, slice[len(slice)-1])
 		}
+	} else if len(slice) == 1 {
+		result = append(result, slice[0])
 	}
-	if inWord {
-		arr = append(arr, s[wordStart:])
-	}
-	return arr
+
+	return result
 }
 
 func Low(word string) string {
@@ -97,8 +91,14 @@ func Up(word string) string {
 
 func Capit(word string) string {
 	cap_word := ""
+	index := 0
 	for i, char := range word {
-		if i == 0 {
+		if !unicode.IsLetter(char) && !unicode.IsDigit(char) {
+			if len(word) > index+1 {
+				index++
+			}
+		}
+		if i == index {
 			cap_word += string(unicode.ToUpper(char))
 		} else {
 			cap_word += string(unicode.ToLower(char))

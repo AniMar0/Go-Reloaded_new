@@ -7,18 +7,13 @@ func AtoAn(s string) string {
 	result := ""
 
 	for i, w := range slice {
-		if w == "a" {
+		if w == "a" || w == "A" {
 			if i != len(slice)-1 {
 				nextWord := strings.ToLower(slice[i+1])
-				if len(nextWord) > 0 && (nextWord[0] == 'a' || nextWord[0] == 'e' || nextWord[0] == 'i' || nextWord[0] == 'o' || nextWord[0] == 'u' || nextWord[0] == 'h') {
-					w = "an"
-				}
-			}
-		} else if w == "A" {
-			if i != len(slice)-1 {
-				nextWord := strings.ToLower(slice[i+1])
-				if len(nextWord) > 0 && (nextWord[0] == 'a' || nextWord[0] == 'e' || nextWord[0] == 'i' || nextWord[0] == 'o' || nextWord[0] == 'u' || nextWord[0] == 'h') {
-					w = "An"
+				if len(nextWord) > 0 && strings.ContainsAny(string(nextWord[0]), "aeiouh") {
+					if w == "a" || w == "A" {
+						w += "n"
+					}
 				}
 			}
 		}

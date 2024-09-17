@@ -14,8 +14,9 @@ func Convert_By_Bas(Data []string, Bas string) ([]string, error) {
 		base = 2
 	}
 	for i := len(Data) - 1; i >= 0; i-- {
-		if !flags.checkFlag(Data[i]) {
-			conver, err := strconv.ParseInt(Data[i], base, 0)
+		if !flags.isFlag(Data[i]) {
+			// handli ar39a en arab
+			conver, err := strconv.ParseInt((Data[i]), base, 0)
 			Data[i] = strconv.Itoa(int(conver))
 			return Data, err
 		}
@@ -55,4 +56,3 @@ func Convert_To(Data, Type string) (string, error) {
 	Data = strings.Join(New_Data_Slices, " ")
 	return Data, err
 }
-

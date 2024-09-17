@@ -8,18 +8,28 @@ import (
 )
 
 func main() {
-	
-	Data, err := reload.Read_File()
+	Data, flag, err := reload.ReadFile()
 	if err != nil {
-		fmt.Fprint(os.Stderr, err)
+		fmt.Fprintln(os.Stderr, err)
 		return
 	}
 
-	Data, err = reload.Modifications_Control(Data)
-	if err != nil {
-		fmt.Fprint(os.Stderr, err)
-		return
+	if flag != "--All" {
+		Data, err = reload.All_Control(Data)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return
+		}
+
+	} else {
+		Data, err = reload.Modifications_Control(Data)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return
+		}
 	}
 
-	reload.Write_File(Data)
+	reload.WriteFile(Data)
 }
+
+// amine

@@ -8,7 +8,7 @@ import (
 
 func LUC(Data []string, Number int, luc func(string) string) []string {
 	for i := len(Data) - 1; i >= len(Data)-Number; i-- {
-		if !flags.checkFlag(Data[i]) {
+		if !flags.isFlag(Data[i]) {
 			Data[i] = luc(Data[i])
 		} else {
 			Number++
@@ -17,29 +17,29 @@ func LUC(Data []string, Number int, luc func(string) string) []string {
 	return Data
 }
 
-func Low_Up_Cap_Specified(Data string, up, low, cap bool) (string, error) {
-	SliceOfData := SplitUpCapLow(Data)
+func Low_Up_Cap_Specified(Data string) (string, error) {
+	SliceOfData := SplitLowUpCap(Data)
 	SliceOfData = Clean(SliceOfData)
 	SliceOfData_New := []string{}
 	for i, word := range SliceOfData {
 		switch {
-		case flags.lowFlag(word) && (!up && low && !cap):
+		case flags.lowFlag(word):
 			if i == 0 {
 				continue
 			}
 			SliceOfData_New = LUC(SliceOfData_New, 1, Low)
-		case flags.upFlag(word) && (up && !low && !cap):
+		case flags.upFlag(word):
 			if i == 0 {
 				continue
 			}
 			SliceOfData_New = LUC(SliceOfData_New, 1, Up)
-		case flags.capFlag(word) && (!up && !low && cap):
+		case flags.capFlag(word):
 			if i == 0 {
 				continue
 			}
 			SliceOfData_New = LUC(SliceOfData_New, 1, Capit)
 
-		case flags.lowSpecified(word) && (up && cap && low):
+		case flags.lowSpecified(word):
 			if i == 0 {
 				continue
 			}
@@ -52,7 +52,7 @@ func Low_Up_Cap_Specified(Data string, up, low, cap bool) (string, error) {
 			}
 
 			SliceOfData_New = LUC(SliceOfData_New, Number, Low)
-		case flags.upSpecified(word) && (up && cap && low):
+		case flags.upSpecified(word):
 			if i == 0 {
 				continue
 			}
@@ -65,7 +65,7 @@ func Low_Up_Cap_Specified(Data string, up, low, cap bool) (string, error) {
 			}
 
 			SliceOfData_New = LUC(SliceOfData_New, Number, Up)
-		case flags.capSpecified(word) && (up && cap && low):
+		case flags.capSpecified(word):
 			if i == 0 {
 				continue
 			}
@@ -96,7 +96,8 @@ func IsDigit(word string) (bool, int) {
 	} else {
 		word = word[5 : len(word)-1]
 	}
-	number, err := strconv.Atoi(word)
+
+	number, err := strconv.Atoi(RemoveSpaceFlag(word))
 	if err != nil {
 		return false, number
 	}
