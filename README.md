@@ -79,7 +79,7 @@ go test
 
 **🦄 Languages**:   Go (Golang), Markdown<br> 
 **💼 Tools**:   VSCode, Go testing framework, Git<br> 
-**📦 Packages**:   strconv, strings, regexp (Regex for advanced text manipulation)<br>
+**📦 Packages**:   strconv, strings<br>
 
 ## 👨‍💻 About Me
 <p align="left"> I'm a passionate developer who enjoys building text processing tools and solving complex problems through code. Currently, I'm honing my Go skills and working on various backend projects. I also love collaborating on open-source projects. </p> <p align="left"> 💌 Feel free to reach out: ⤵️ </p> 
